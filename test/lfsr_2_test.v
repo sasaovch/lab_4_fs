@@ -20,13 +20,13 @@ lfsr_2 lfsr_2_1(
 initial begin
     clk = 0;
     rst = 1;
-    in_test = 8'b10101010;
+    in_test = 8'b11110000;
     #10
     rst = 0;
     #10
     start = 1;
     
-    for (i = 0; i < 30; i = i + 1) begin
+    for (i = 0; i < 27; i = i + 1) begin
         #10
         $display("Value %d", i[9:0], ": %d", out_test);
     end

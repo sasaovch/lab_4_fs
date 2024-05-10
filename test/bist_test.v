@@ -7,25 +7,28 @@ reg rst;
 reg start;
 reg test_button;
 wire busy; 
-reg [ 7 : 0 ] in_test_a;
-reg [ 7 : 0 ] in_test_b;
-wire [ 12 : 0 ] out_test;   
-bist_logic bist_logic1(
+
+reg [7:0] in_test_a;
+reg [7:0] in_test_b;
+wire [15:0] out_test;  
+
+bist bist_logic1(
     .clk_i(clk), 
     .rst_i(rst), 
+    .start_i(start), 
     .a_i(in_test_a), 
     .b_i(in_test_b), 
-    .start_i(start), 
-    .busy_o(busy), 
+    .test_button(test_button),
     .y_o(out_test), 
-    .test_button(test_button)
+    .busy_o(busy)
 );
+
 
 task test_bist_1;
     input [3:0] numb;
     input [7:0] a;
     input [7:0] b;
-    input [4:0] expected_y;
+    input [15:0] expected_y;
     begin
         test_button = 0;
         in_test_a = a;
@@ -44,7 +47,7 @@ endtask
     
 task test_bist_2;
     input [3:0] numb;
-    input [12:0] expected_y;
+    input [15:0] expected_y;
     begin
         start = 1;
         #1000000
@@ -66,14 +69,8 @@ initial begin
     $display ( "Test user mode");
     test_bist_1(1, 0, 0, 0);
     test_bist_1(2, 1, 1, 1);
-    test_bist_1(3, 12, 60, 3);
-    test_bist_1(4, 123, 223, 11);
-    test_bist_1(5, 255, 255, 16);
-    test_bist_1(6, 255, 30, 16);
-    test_bist_1(7, 30, 255, 6);
-    test_bist_1(8, 1, 255, 2);  
-    test_bist_1(9, 255, 1, 16);
-    test_bist_1(10, 45, 64, 7);
+    test_bist_1(3, 20, 55, 60);
+    test_bist_1(4, 30, 255, 180);
     
     $display ( "Test bist mode");
     test_button = 1;

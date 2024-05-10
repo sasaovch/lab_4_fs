@@ -3,11 +3,11 @@
 module crc8 (
     input wire clk_i,
     input wire rst_i,
-    input wire [ 4 : 0 ] val,
-    input wire [ 7 : 0 ] init_val,
+    input wire [15:0] val,
+    input wire [7:0] init_val,
     input wire start_i,
     output wire busy_o,
-    output wire [ 7 : 0 ] result
+    output wire [7:0] result
 );
 
 localparam IDLE = 2'b00;
@@ -21,7 +21,7 @@ reg [7:0] register;
 assign result = register;
 
 reg bit;
-reg[2 : 0] counter;
+reg[5 : 0] counter;
 
 always @(posedge clk_i) begin
     if (rst_i) begin
@@ -41,7 +41,7 @@ always @(posedge clk_i) begin
                     end
                 TAKE_CUR_BIT:
                     begin
-                        if (counter == 5) begin
+                        if (counter == 16) begin
                             state <= IDLE;
                         end else begin
                             bit <= val[counter];

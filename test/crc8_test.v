@@ -6,10 +6,10 @@ reg clk;
 reg rst;
 reg start;
 wire busy;  
-reg [ 7 : 0 ] init;
-reg [ 7 : 0 ] in_test;
-wire [ 7 : 0 ] out_test;   
-reg [ 7 : 0 ] expected_val;
+reg [7:0] init;
+reg [15:0] in_test;
+wire [7:0] out_test;   
+reg [7:0] expected_val;
 
 crc8 crc8_1(
     .clk_i(clk), 
@@ -25,8 +25,8 @@ initial begin
     clk = 0;
     rst = 1;
     init = 8'b11111111;
-    in_test = 8'b10101010;
-    expected_val = 8'b10001100;
+    in_test = 8'b1010101010101010;
+    expected_val = 8'b10011011;
     #10
     rst = 0;
     #10

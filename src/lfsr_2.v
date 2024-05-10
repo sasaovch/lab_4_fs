@@ -16,14 +16,14 @@ always @(posedge clk_i) begin
         register <= val;
     end else if (start_i) begin
         
-        buffer[0] <= 0;
-        buffer[1] <= buffer[0];
-        buffer[2] <= buffer[1];
-        buffer[3] <= buffer[2] ^ buffer[7];
-        buffer[4] <= buffer[3];
-        buffer[5] <= buffer[4];
-        buffer[6] <= buffer[5] ^ buffer[7];
-        buffer[7] <= buffer[6] ^ buffer[7];
+        register[0] <= 0;
+        register[1] <= register[0];
+        register[2] <= register[1];
+        register[3] <= register[2] ^ register[7];
+        register[4] <= register[3];
+        register[5] <= register[4];
+        register[6] <= register[5] ^ register[7];
+        register[7] <= register[6] ^ register[7];
     end
 end
 endmodule

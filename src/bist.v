@@ -7,7 +7,7 @@ module bist (
     input wire [7:0] a_i,
     input wire [7:0] b_i,
     input wire test_button,
-    output reg [ 12 : 0 ] y_o,
+    output reg [15:0] y_o,
     output busy_o
 );
 
@@ -24,7 +24,7 @@ wire mode;
 wire start_mode;
 reg prev_mode;
 reg is_test_mode_now;
-reg [3:0] test_count = 0;
+reg [7:0] test_count = 0;
 reg [7:0] iter_count;
 
 reg rst;
@@ -32,7 +32,7 @@ reg start;
 wire busy;
 reg [7:0] a;
 reg [7:0] b;
-wire [4:0] y;
+wire [15:0] y;
 
 reg lfsr_rst;
 reg lfsr_start;
@@ -43,7 +43,8 @@ wire [7:0] crc8_result;
 reg [7:0] crc8_init;
 wire crc8_busy;
 
-reg  [7:0] lfsr_init;
+reg  [7:0] lfsr_1_init;
+reg  [7:0] lfsr_2_init;
 wire [7:0] lfsr1_result;
 wire [7:0] lfsr2_result;
 
@@ -74,7 +75,7 @@ ab ab_inst(
 lfsr_1 lfsr1(
     .clk_i(clk_i),
     .rst_i(lfsr_rst),
-    .val(lfsr_init),
+    .val(lfsr_1_init),
     .start_i(lfsr_start),
     .result(lfsr1_result)
 );
@@ -82,7 +83,7 @@ lfsr_1 lfsr1(
 lfsr_2 lfsr2(
     .clk_i(clk_i),
     .rst_i(lfsr_rst),
-    .val(lfsr_init),
+    .val(lfsr_2_init),
     .start_i(lfsr_start),
     .result(lfsr2_result)
 );
@@ -123,7 +124,8 @@ always @(posedge clk_i) begin
             begin
                 if (is_test_mode_now && start_mode) begin
                     state <= START_TEST_MODE;
-                    lfsr_init <= 8'b10101010;
+                    lfsr_1_init <= 8'b01010101;
+                    lfsr_2_init <= 8'b11110000;
                     lfsr_rst <= 1;
                     crc8_rst <= 1;
                     rst <= 1;
@@ -153,7 +155,7 @@ always @(posedge clk_i) begin
             begin
                 start <= 0;
                 if(~busy && ~start) begin  
-                   y_o [4:0] <= y;
+                   y_o[15:0] <= y;
                    state <= IDLE;
                 end
             end
@@ -191,8 +193,8 @@ always @(posedge clk_i) begin
                 crc8_start <= 0;
                 if(~crc8_busy && ~crc8_start) begin  
                    if (&iter_count) begin
-                        y_o [12:9] <= test_count;
-                        y_o [7:0] <= crc8_result;
+                        y_o[15:8] <= test_count;
+                        y_o[7:0] <= crc8_result;
                         state <= IDLE;
                    end else begin
                         iter_count <= iter_count + 1;
