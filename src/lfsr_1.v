@@ -15,7 +15,6 @@ always @(posedge clk_i) begin
     if (rst_i) begin
         register <= val;
     end else if (start_i) begin
-        
         register = {register[6:0], (register[6]^register[4]^register[3]^register[0])};
     end
 end

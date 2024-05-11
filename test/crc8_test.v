@@ -25,8 +25,8 @@ initial begin
     clk = 0;
     rst = 1;
     init = 8'b11111111;
-    in_test = 8'b1010101010101010;
-    expected_val = 8'b10011011;
+    in_test = 16'b1010101010101010;
+    expected_val = 8'b11001110;
     #10
     rst = 0;
     #10
